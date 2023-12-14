@@ -4,10 +4,9 @@ set(CXX_STANDARD 11)
 find_package( OpenCV REQUIRED )
 find_package(Ceres REQUIRED )
 find_package(pybind11 REQUIRED)
+set(LIBRARY_OUTPUT_DIRECTORY Modules/ImageProcModule/) 
 
-pybind11_add_module(ImageProcModule ImageProcModule_pybinding.cpp)
+pybind11_add_module(ImageProcModule Modules/ImageProcModule/ImageProcModule_pybinding.cpp)
 
 target_link_libraries( ImageProcModule PRIVATE ${OpenCV_LIBS} )
 target_link_libraries( ImageProcModule PRIVATE Ceres::ceres)
-# EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
-# define (VERSION_INFO) here.

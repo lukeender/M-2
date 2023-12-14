@@ -1,11 +1,8 @@
 #include <string>
 #include <opencv2/opencv.hpp>
-#include <filesystem>
 #include <vector>
-#include <iostream>
 #include <cmath>
 #include <ceres/ceres.h>
-#include <chrono>
 #include <thread>
 namespace fs = std::filesystem;
 using namespace std;
@@ -38,7 +35,8 @@ private:
 class ImageProcessor
 {
     public:
-        static inline cv::Mat darkimage;
+        static inline cv::Mat darkimage; // the dark (calibration) image is the same
+                                         // for every image, so we treat it as static
         static inline bool darkimageinit = false;
         
         ImageProcessor(string filename,string darkfilename) : _filename(filename)
@@ -104,7 +102,7 @@ class ImageProcessor
                 for (int j = 0; j < image.rows; j++)
                 {
                     temp = image.at<uchar>(j,i);
-                    if (temp > 10)
+                    if (temp > 10) // throw out small (<4% of dyanimc range) values
                     {
                         col += temp*i;
                         row += temp*j;
