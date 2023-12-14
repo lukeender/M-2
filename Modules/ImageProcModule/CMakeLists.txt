@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.0.0)
+project(ImageProcModule VERSION 0.1.0 LANGUAGES C CXX)
+find_package( OpenCV REQUIRED )
+find_package(Ceres REQUIRED )
+include(CTest)
+enable_testing()
+
+add_library(ImageProcModule SHARED ImageProcModule.cpp)
+target_link_libraries( ImageProcModule ${OpenCV_LIBS} )
+target_link_libraries( ImageProcModule Ceres::ceres)
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
