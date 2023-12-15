@@ -1,6 +1,6 @@
 # M-2
 
-This is a program I wrote to demonstrate a simple scientific programming task and later extended to show performance gains that can come from using pybind11 to allowing easy interfacing between C++ modlues and Python. For more information about the task itself, please open the M2.ipynb and read the first few markdown cells.
+This is a program I wrote to demonstrate a simple scientific programming task and later extended to show performance gains that can come from using pybind11 to allow easy interfacing between C++ classes and Python. For more information about the task itself, please open the M2.ipynb and read the first few markdown cells.
 
 ## Dependencies:
 * Numpy
@@ -11,6 +11,7 @@ This is a program I wrote to demonstrate a simple scientific programming task an
 * [Ceres](http://ceres-solver.org/) (tested with 2.2.0)
 
 ## Installation
+* Ensure all prerequisites are installed
 * Clone the repository into the folder of your choice
 * In the terminal with the chosen folder as your working directory run the following commands:
 
