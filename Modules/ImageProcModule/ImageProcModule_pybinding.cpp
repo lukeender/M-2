@@ -7,7 +7,7 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(ImageProcModule, m) {
     py::class_<ImageProcessor>(m, "ImageProcessor")
-        .def(py::init<std::string, std::string>())
+        .def(py::init<std::string, std::string, double>())
         .def("run", &ImageProcessor::run)
         .def("getresx", &ImageProcessor::getresx)
         .def("getresy", &ImageProcessor::getresy);

@@ -62,7 +62,7 @@ class ImageProcessor
 
         }
 
-        vector<double> getresx() {return resx;}
+        vector<double> getresx() {return resx;} //getter functions for fit results
         vector<double> getresy() {return resy;}
 
         vector<double> runfit(vector<uchar> y, double centerguess)
@@ -81,33 +81,16 @@ class ImageProcessor
                 );
             }
 
-            // Set solver options
             ceres::Solver::Options options;
             options.num_threads = std::thread::hardware_concurrency();
             //options.minimizer_progress_to_stdout = true;
 
-            // Solve the problem
             ceres::Solver::Summary summary;
             ceres::Solve(options, &problem, &summary);
             return vector<double>(params, params + 4);
         }
 
     private:
-        //finds the min and max values in a vector 
-        //and stores the values in "minval" and "maxval"
-        void calcMinMax(vector<uchar> vec, uchar& minval, uchar& maxval)
-        {
-            uchar mi = std::numeric_limits<uchar>::max();
-            uchar ma = 0;
-            for (uchar val : vec)
-            {
-                ma = std::max(ma,val);
-                mi = std::min(mi,val);
-            }
-            minval = mi;
-            maxval = ma;
-        }
-
         //estimates the location of the center of intensity in image
         //via a linearly weighted sum. Stores result in "center"
         void findCenterOfIntensity()
