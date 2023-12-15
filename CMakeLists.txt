@@ -4,7 +4,6 @@ set(CXX_STANDARD 11)
 find_package( OpenCV REQUIRED )
 find_package(Ceres REQUIRED )
 find_package(pybind11 REQUIRED)
-set(LIBRARY_OUTPUT_DIRECTORY Modules/ImageProcModule/) 
 
 pybind11_add_module(ImageProcModule Modules/ImageProcModule/ImageProcModule_pybinding.cpp)
 

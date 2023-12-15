@@ -39,19 +39,37 @@ class ImageProcessor
                                          // for every image, so we treat it as static
         static inline bool darkimageinit = false;
         
-        ImageProcessor(string filename,string darkfilename) : _filename(filename)
-        {if (!darkimageinit) {darkimage = cv::imread(darkfilename,cv::IMREAD_GRAYSCALE);
-                              darkimageinit = true;}}
+        ImageProcessor(string filename,string darkfilename, double widthguess_ = 100) : _filename(filename)
+        {
+            widthguess = widthguess_;
+            if (!darkimageinit)
+            {
+                darkimage = cv::imread(darkfilename,cv::IMREAD_GRAYSCALE);
+                darkimageinit = true;
+            }
+        }
         void run()
         {
             image = cv::imread(_filename,cv::IMREAD_GRAYSCALE) - darkimage;
             cv::GaussianBlur(image,image, cv::Size(0,0),1);
-            vector<uchar> y = {};
             findCenterOfIntensity();
+            vector<uchar> y = {};
             image.row(center.x).copyTo(y);
-            uchar minval, maxval;
-            calcMinMax(y,minval,maxval);
-            double params[4] = {(double)minval, (double)maxval, (double)center.y, 100.0};
+            vector<uchar> x = {};
+            image.col(center.y).copyTo(x);
+            resx = runfit(y,(double)center.y);
+            resy = runfit(x,(double)center.x);
+
+        }
+
+        vector<double> getresx() {return resx;}
+        vector<double> getresy() {return resy;}
+
+        vector<double> runfit(vector<uchar> y, double centerguess)
+        {
+            uchar maxval = y[(int)centerguess];
+            uchar minval = y[0];
+            double params[4] = {(double)minval, (double)maxval, centerguess, widthguess};
             ceres::Problem problem;
             for (int i = 0; i < y.size(); ++i) {
                 problem.AddResidualBlock(
@@ -71,9 +89,8 @@ class ImageProcessor
             // Solve the problem
             ceres::Solver::Summary summary;
             ceres::Solve(options, &problem, &summary);
-            res = vector<double>(params, params + 4);
+            return vector<double>(params, params + 4);
         }
-        vector<double> getres() {return res;}
 
     private:
         //finds the min and max values in a vector 
@@ -117,7 +134,10 @@ class ImageProcessor
         string _filename; //the filename of the image to load and analyze
         cv::Mat image; //the image data to analyze
         cv::Point center; //the approximate center of the gaussian
-        vector<double> res; //the output parameters of the optimization
+        vector<double> resx; //the output parameters of the optimization
+        vector<double> resy; //the output parameters of the optimization
+        double widthguess; //the inidial guess of the 1/e^2 width
+        
 };
 
 

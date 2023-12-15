@@ -9,5 +9,6 @@ PYBIND11_MODULE(ImageProcModule, m) {
     py::class_<ImageProcessor>(m, "ImageProcessor")
         .def(py::init<std::string, std::string>())
         .def("run", &ImageProcessor::run)
-        .def("getres", &ImageProcessor::getres);
+        .def("getresx", &ImageProcessor::getresx)
+        .def("getresy", &ImageProcessor::getresy);
 }
